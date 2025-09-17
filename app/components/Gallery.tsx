@@ -2,14 +2,14 @@
 'use client';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, Grid } from 'swiper/modules';
+import { Navigation, Pagination, Autoplay, EffectCreative } from 'swiper/modules'; // Import EffectCreative
 import { motion } from 'framer-motion';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import 'swiper/css/grid';
+import 'swiper/css/effect-creative'; // Import Creative effect styles
 
 const galleryItems = [
     { id: 1, src: "https://images.unsplash.com/photo-1674465992629-f8f81a8fb6d9?q=80&w=912&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", name: "The Solitaire Ring" },
@@ -20,7 +20,6 @@ const galleryItems = [
 ];
 
 export function Gallery() {
-    // Animation variants for the entire section
     const sectionVariants = {
         hidden: { opacity: 0, y: 50 },
         visible: {
@@ -29,17 +28,15 @@ export function Gallery() {
             transition: {
                 duration: 0.8,
                 ease: "easeOut",
-                when: "beforeChildren",
                 staggerChildren: 0.2,
             },
         },
-    } as const; // FIX: Added 'as const'
+    } as const;
 
-    // Animation variants for individual items (title and swiper)
     const itemVariants = {
         hidden: { opacity: 0, y: 30 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-    } as const; // FIX: Added 'as const'
+    } as const;
 
     return (
         <motion.section
@@ -60,44 +57,37 @@ export function Gallery() {
 
                 <motion.div variants={itemVariants}>
                     <Swiper
-                        modules={[Navigation, Pagination, Autoplay, Grid]}
-                        spaceBetween={30}
+                        modules={[Navigation, Pagination, Autoplay, EffectCreative]}
+                        grabCursor={true}
                         loop={true}
+                        effect={'creative'}
+                        creativeEffect={{
+                            prev: {
+                                shadow: true,
+                                translate: [0, 0, -400],
+                            },
+                            next: {
+                                translate: ['100%', 0, 0],
+                            },
+                        }}
                         autoplay={{
-                            delay: 3000,
+                            delay: 3500,
                             disableOnInteraction: false,
                         }}
                         pagination={{ clickable: true }}
                         navigation={true}
-                        breakpoints={{
-                            640: {
-                                slidesPerView: 1,
-                                grid: { rows: 1 },
-                            },
-                            768: {
-                                slidesPerView: 2,
-                                grid: { rows: 1 },
-                            },
-                            1024: {
-                                slidesPerView: 3,
-                                grid: { rows: 2, fill: 'row' },
-                                spaceBetween: 20,
-                                loop: false,
-                                autoplay: false,
-                            },
-                        }}
-                        className="w-full h-[500px] md:h-[600px] lg:h-[700px] pb-12"
+                        className="w-full md:w-4/5 lg:w-3/5 h-[500px] md:h-[600px] rounded-lg"
                     >
                         {galleryItems.map((item) => (
-                            <SwiperSlide key={item.id} className="relative group overflow-hidden rounded-lg shadow-lg bg-card border border-primary/10">
+                            <SwiperSlide key={item.id} className="relative group overflow-hidden bg-black">
                                 <img
                                     src={item.src}
                                     alt={item.name}
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-80"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                <div className="absolute bottom-0 left-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <h3 className="text-white text-2xl font-serif drop-shadow-lg">{item.name}</h3>
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                                <div className="absolute bottom-0 left-0 p-8">
+                                    <h3 className="text-white text-3xl font-serif drop-shadow-lg">{item.name}</h3>
                                 </div>
                             </SwiperSlide>
                         ))}
